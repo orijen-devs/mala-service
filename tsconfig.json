@@ -107,12 +107,10 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "ts-node": {
-    "esm": true
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   },
   "include": [
-    "/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+    "./src/**/*"
+  ]
 }
