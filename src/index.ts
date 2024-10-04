@@ -10,6 +10,7 @@ import cartRoutes from './services/cart-service/cart.routes'
 import orderRoutes from './services/order-service/order.routes'
 import transactionRoutes from './services/transaction-service/transaction.routes'
 import { paymentStatus } from './services/transaction-service/transaction.controllers'
+import { Transaction } from './services/transaction-service/transaction.model'
 
 
 const bodyParser = require("body-parser")
@@ -47,13 +48,23 @@ app.post('/mala-webhook', async (req, res) => {
     const event: any = await paymentStatus(req.body.transId)
 
     if(event.statusCode !== 200)
-        return res.status(400).send({message: event.message});
+        return res.status(400).json({message: event.message});
     
       // Handle the event
       switch (event.status) {
         case 'SUCCESSFUL':
           // Then define and call a function to handle a SUCCESSFUL payment
           console.log(event, 'successful');
+          const transaction = new Transaction({
+            _id: req.body.transId,
+            customer: req.body.userId,
+            status: req.body.status,
+            order: req.body.externalId,
+            dateInitiated: req.body.dateInitiated,
+            dateConfirmed: req.body.dateConfirmed
+          })
+
+          await transaction.save()
           break;
         case 'FAILED':
           // Then define and call a function to handle a FAILED payment

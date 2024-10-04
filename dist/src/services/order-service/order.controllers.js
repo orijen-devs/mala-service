@@ -49,11 +49,13 @@ const createOrder = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             totalAmount: order.totalAmount,
             deliveryAddress: order.deliveryAddress,
             courierInstructions: order.courierInstructions,
+            customerLocation: order.customerLocation,
             vendorInstructions: order.vendorInstructions,
             pickupTime: order.pickupTime,
             status: order_models_1.ORDER_STATUS.PENDING
         });
         yield newOrder.save();
+        req.body.orderId = newOrder._id;
         next();
     }
     catch (error) {

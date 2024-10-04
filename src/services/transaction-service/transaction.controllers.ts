@@ -15,6 +15,8 @@ const initiatePayment = async(req: Request, res: Response) => {
     const data = {
         amount: req.body.order.totalAmount,
         email: req.body.user.email,
+        userId: req.body.user._id,
+        externalId: req.body.orderId,
         redirectUrl: 'http://localhost:3000'
     }
     

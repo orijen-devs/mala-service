@@ -21,16 +21,18 @@ const headers = {
 };
 const initiatePayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const paymentData = req.body.order;
-    console.log(paymentData);
+    console.log(paymentData.totalAmount);
     const data = {
         amount: req.body.order.totalAmount,
         email: req.body.user.email,
+        userId: req.body.user._id,
+        externalId: req.body.orderId,
         redirectUrl: 'http://localhost:3000'
     };
     try {
         if (!paymentData.totalAmount)
             return res.json({ status: 400, message: 'amount required' });
-        if (!Number.isInteger(paymentData.amount))
+        if (!Number.isInteger(paymentData.totalAmount))
             return res.json({ status: 400, message: 'amount must be a number' });
         if (paymentData.totalAmount < 100)
             return res.json({ status: 400, message: 'amount cannot be less than 100' });

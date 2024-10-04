@@ -23,6 +23,7 @@ const cart_routes_1 = __importDefault(require("./services/cart-service/cart.rout
 const order_routes_1 = __importDefault(require("./services/order-service/order.routes"));
 const transaction_routes_1 = __importDefault(require("./services/transaction-service/transaction.routes"));
 const transaction_controllers_1 = require("./services/transaction-service/transaction.controllers");
+const transaction_model_1 = require("./services/transaction-service/transaction.model");
 const bodyParser = require("body-parser");
 mongoose_1.default.connect(process.env.MONGODB_CONNECT_STRING).then(() => console.log('Connected to mala cluster'));
 const app = (0, express_1.default)();
@@ -45,12 +46,21 @@ app.post('/mala-webhook', (req, res) => __awaiter(void 0, void 0, void 0, functi
     console.log(req.body);
     const event = yield (0, transaction_controllers_1.paymentStatus)(req.body.transId);
     if (event.statusCode !== 200)
-        return res.status(400).send({ message: event.message });
+        return res.status(400).json({ message: event.message });
     // Handle the event
     switch (event.status) {
         case 'SUCCESSFUL':
             // Then define and call a function to handle a SUCCESSFUL payment
             console.log(event, 'successful');
+            const transaction = new transaction_model_1.Transaction({
+                _id: req.body.transId,
+                customer: req.body.userId,
+                status: req.body.status,
+                order: req.body.externalId,
+                dateInitiated: req.body.dateInitiated,
+                dateConfirmed: req.body.dateConfirmed
+            });
+            yield transaction.save();
             break;
         case 'FAILED':
             // Then define and call a function to handle a FAILED payment

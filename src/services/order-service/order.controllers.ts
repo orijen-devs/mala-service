@@ -58,8 +58,10 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
         })
     
         await newOrder.save()
+
+        req.body.orderId = newOrder._id
     
-       next()
+        next()
         
     } catch (error) {
         return res.json({ status: 500, message: 'server_error' })
