@@ -41,7 +41,7 @@ app.use('/vendor-service/restaurant', restaurant_routes_1.default);
 app.use('/cart-service/cart', cart_routes_1.default);
 app.use('/order-service/order', order_routes_1.default);
 app.use('/transaction-service/transaction', transaction_routes_1.default);
-app.post('/mala-webhook', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/mala-webhook', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
     const event = yield (0, transaction_controllers_1.paymentStatus)(req.body.transId);
     if (event.statusCode !== 200)
@@ -51,12 +51,10 @@ app.post('/mala-webhook', (req, res, next) => __awaiter(void 0, void 0, void 0, 
         case 'SUCCESSFUL':
             // Then define and call a function to handle a SUCCESSFUL payment
             console.log(event, 'successful');
-            next();
             break;
         case 'FAILED':
             // Then define and call a function to handle a FAILED payment
             console.log(event, 'failed');
-            res.json({ status: 200, paymentFailed: true, message: 'Payment failed' });
             break;
         case 'EXPIRED':
             // Then define and call a function to handle an expired transaction
@@ -66,6 +64,7 @@ app.post('/mala-webhook', (req, res, next) => __awaiter(void 0, void 0, void 0, 
         default:
             console.log(`Unhandled event status: ${event.type}`);
     }
+    res.send('ok');
 }));
 app.listen(5000, () => {
     // const options = {
