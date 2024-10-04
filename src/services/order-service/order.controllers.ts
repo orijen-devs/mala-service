@@ -2,17 +2,56 @@ import { Request, Response } from "express"
 import { Order, ORDER_STATUS } from "./order.models"
 
 const createOrder = async (req: Request, res: Response) => {
+    const customer = req.body.user._id
+    const order = req.body.order
     // handle payment sucessful
+
+    console.log(order)
+
     try {
-        const order = req.body.order
+
+        //check if order exists
+        const existingPendingOrders = await Order.find({ customer, restaurant: order.restaurant, status: ORDER_STATUS.PENDING })
+
+        if (existingPendingOrders.length >= 3) {
+            return res.json({ status: 403, message: 'too many pending orders' })
+        }
+
+        if(!order.restaurant) {
+            return res.json({ status: 400, message: 'restaurant required' })
+        }
+
+        if(!order.items) {
+            return res.json({ status: 400, message: 'items required' })
+        }
+
+        if(!order.variousFees) {
+            return res.json({ status: 400, message: 'Various fees required' })
+        }
+
+        if(!order.totalAmount) {
+            return res.json({ status: 400, message: 'Total amount required' })
+        }
+
+        if(!order.deliveryAddress) {
+            return res.json({ status: 400, message: 'Delivery address required' })
+        }
+
+        if(!order.diningMode) {
+            return res.json({ status: 400, message: 'Dining mode required'})
+        }
 
         const newOrder = new Order({
-            customer: order.customer,
+            customer,
             restaurant: order.restaurant,
             items: order.items,
+            diningMode: order.diningMode,
             variousFees: order.variousFees,
             totalAmount: order.totalAmount,
             deliveryAddress: order.deliveryAddress,
+            courierInstructions: order.courierInstructions,
+            vendorInstructions: order.vendorInstructions,
+            pickupTime: order.pickupTime,
             status: ORDER_STATUS.PENDING
         })
     

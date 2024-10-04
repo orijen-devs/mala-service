@@ -21,7 +21,6 @@ const RestaurantSchema = new mongoose.Schema({
     owner_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     name: { type: String, required: true },
     description: { type: String },
-    city: { type: String, required: true },
     address: { 
         street: { type: String, required: true },
         city: { type: String, required: true },
