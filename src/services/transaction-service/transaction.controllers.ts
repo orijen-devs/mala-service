@@ -10,7 +10,7 @@ const headers = {
 
 const initiatePayment = async(req: Request, res: Response) => {
     const paymentData = req.body.order
-    console.log(paymentData)
+    console.log(paymentData.totalMount) 
 
     const data = {
         amount: req.body.order.totalAmount,
