@@ -3,10 +3,11 @@ import { Order, ORDER_STATUS } from "./order.models"
 
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
     const customer = req.body.user._id
-    const order = req.body
+    const order = req.body.order
     // handle payment sucessful
 
     console.log(order)
+    console.log(customer)
 
     try {
 

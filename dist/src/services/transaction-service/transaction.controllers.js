@@ -20,10 +20,10 @@ const headers = {
     apikey: 'FAK_TEST_8210da833bc136a989c8'
 };
 const initiatePayment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const paymentData = req.body;
+    const paymentData = req.body.order;
     console.log(paymentData);
     const data = {
-        amount: req.body.totalAmount,
+        amount: req.body.order.totalAmount,
         email: req.body.user.email,
         redirectUrl: 'http://localhost:3000'
     };

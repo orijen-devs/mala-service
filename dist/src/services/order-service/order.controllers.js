@@ -12,9 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const order_models_1 = require("./order.models");
 const createOrder = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const customer = req.body.user._id;
-    const order = req.body;
+    const order = req.body.order;
     // handle payment sucessful
     console.log(order);
+    console.log(customer);
     try {
         //check if order exists
         const existingPendingOrders = yield order_models_1.Order.find({ customer, restaurant: order.restaurant, status: order_models_1.ORDER_STATUS.PENDING });
