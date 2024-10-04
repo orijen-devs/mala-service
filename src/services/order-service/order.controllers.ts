@@ -51,6 +51,7 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
             totalAmount: order.totalAmount,
             deliveryAddress: order.deliveryAddress,
             courierInstructions: order.courierInstructions,
+            customerLocation: order.customerLocation,
             vendorInstructions: order.vendorInstructions,
             pickupTime: order.pickupTime,
             status: ORDER_STATUS.PENDING
