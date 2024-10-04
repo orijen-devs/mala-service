@@ -10,7 +10,7 @@ const headers = {
 
 const initiatePayment = async(req: Request, res: Response) => {
     const paymentData = req.body.order
-    console.log(paymentData.totalMount) 
+    console.log(paymentData.totalAmount) 
 
     const data = {
         amount: req.body.order.totalAmount,
@@ -23,7 +23,7 @@ const initiatePayment = async(req: Request, res: Response) => {
         if (!paymentData.totalAmount) 
             return res.json({ status: 400, message: 'amount required' })
 
-        if (!Number.isInteger(paymentData.amount)) 
+        if (!Number.isInteger(paymentData.totalAmount)) 
             return res.json({ status: 400, message: 'amount must be a number' })
         
         if (paymentData.totalAmount < 100)
