@@ -9,11 +9,11 @@ const headers = {
 }
 
 const initiatePayment = async(req: Request, res: Response) => {
-    const paymentData = req.body.order
+    const paymentData = req.body
     console.log(paymentData)
 
     const data = {
-        amount: req.body.order.totalAmount,
+        amount: req.body.totalAmount,
         email: req.body.user.email,
         redirectUrl: 'http://localhost:3000'
     }

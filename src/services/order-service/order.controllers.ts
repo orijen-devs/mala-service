@@ -1,9 +1,9 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { Order, ORDER_STATUS } from "./order.models"
 
-const createOrder = async (req: Request, res: Response) => {
+const createOrder = async (req: Request, res: Response, next: NextFunction) => {
     const customer = req.body.user._id
-    const order = req.body.order
+    const order = req.body
     // handle payment sucessful
 
     console.log(order)
@@ -57,7 +57,7 @@ const createOrder = async (req: Request, res: Response) => {
     
         await newOrder.save()
     
-        return res.json({ status: 200, message: 'ok' })
+       next()
         
     } catch (error) {
         return res.json({ status: 500, message: 'server_error' })
