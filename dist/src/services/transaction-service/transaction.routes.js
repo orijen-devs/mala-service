@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const transaction_controllers_1 = __importDefault(require("./transaction.controllers"));
 const auth_middleware_1 = require("../middleware/auth.middleware");
+const order_controllers_1 = __importDefault(require("../order-service/order.controllers"));
 const router = express_1.default.Router();
-router.post('/initiate-payment', auth_middleware_1.verifyAuth, transaction_controllers_1.default.initiatePayment);
+router.post('/initiate-payment', auth_middleware_1.verifyAuth, order_controllers_1.default.createOrder, transaction_controllers_1.default.initiatePayment);
 exports.default = router;
