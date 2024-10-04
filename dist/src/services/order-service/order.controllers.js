@@ -10,9 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const order_models_1 = require("./order.models");
-const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createOrder = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const customer = req.body.user._id;
-    const order = req.body.order;
+    const order = req.body;
     // handle payment sucessful
     console.log(order);
     try {
@@ -53,7 +53,7 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             status: order_models_1.ORDER_STATUS.PENDING
         });
         yield newOrder.save();
-        return res.json({ status: 200, message: 'ok' });
+        next();
     }
     catch (error) {
         return res.json({ status: 500, message: 'server_error' });
