@@ -53,7 +53,7 @@ app.post('/mala-webhook', (req, res) => __awaiter(void 0, void 0, void 0, functi
             // Then define and call a function to handle a SUCCESSFUL payment
             console.log(event, 'successful');
             const transaction = new transaction_model_1.Transaction({
-                _id: req.body.transId,
+                transactionId: req.body.transId,
                 customer: req.body.userId,
                 status: req.body.status,
                 order: req.body.externalId,

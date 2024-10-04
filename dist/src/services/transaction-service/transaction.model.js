@@ -12,6 +12,7 @@ var TRANSACTION_STATUS;
     TRANSACTION_STATUS["EXPIRED"] = "EXPIRED";
 })(TRANSACTION_STATUS || (TRANSACTION_STATUS = {}));
 const TransactionSchema = new mongoose_1.default.Schema({
+    transactionId: { type: String, required: true },
     customer: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'User', required: true },
     order: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'Order', required: true },
     status: { type: String, enum: TRANSACTION_STATUS, required: true },

@@ -7,6 +7,7 @@ enum TRANSACTION_STATUS {
 }
 
 const TransactionSchema = new mongoose.Schema({
+    transactionId: { type: String, required: true },
     customer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order', required: true },
     status: { type: String, enum: TRANSACTION_STATUS, required: true },

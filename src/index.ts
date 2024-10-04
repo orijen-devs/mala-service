@@ -56,7 +56,7 @@ app.post('/mala-webhook', async (req, res) => {
           // Then define and call a function to handle a SUCCESSFUL payment
           console.log(event, 'successful');
           const transaction = new Transaction({
-            _id: req.body.transId,
+            transactionId: req.body.transId,
             customer: req.body.userId,
             status: req.body.status,
             order: req.body.externalId,
