@@ -11,16 +11,45 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const order_models_1 = require("./order.models");
 const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const customer = req.body.user._id;
+    const order = req.body.order;
     // handle payment sucessful
+    console.log(order);
     try {
-        const order = req.body.order;
+        //check if order exists
+        const existingPendingOrders = yield order_models_1.Order.find({ customer, restaurant: order.restaurant, status: order_models_1.ORDER_STATUS.PENDING });
+        if (existingPendingOrders.length >= 3) {
+            return res.json({ status: 403, message: 'too many pending orders' });
+        }
+        if (!order.restaurant) {
+            return res.json({ status: 400, message: 'restaurant required' });
+        }
+        if (!order.items) {
+            return res.json({ status: 400, message: 'items required' });
+        }
+        if (!order.variousFees) {
+            return res.json({ status: 400, message: 'Various fees required' });
+        }
+        if (!order.totalAmount) {
+            return res.json({ status: 400, message: 'Total amount required' });
+        }
+        if (!order.deliveryAddress) {
+            return res.json({ status: 400, message: 'Delivery address required' });
+        }
+        if (!order.diningMode) {
+            return res.json({ status: 400, message: 'Dining mode required' });
+        }
         const newOrder = new order_models_1.Order({
-            customer: order.customer,
+            customer,
             restaurant: order.restaurant,
             items: order.items,
+            diningMode: order.diningMode,
             variousFees: order.variousFees,
             totalAmount: order.totalAmount,
             deliveryAddress: order.deliveryAddress,
+            courierInstructions: order.courierInstructions,
+            vendorInstructions: order.vendorInstructions,
+            pickupTime: order.pickupTime,
             status: order_models_1.ORDER_STATUS.PENDING
         });
         yield newOrder.save();
