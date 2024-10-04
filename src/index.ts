@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from 'express'
+import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
 import mongoose from 'mongoose'
@@ -10,15 +10,13 @@ import cartRoutes from './services/cart-service/cart.routes'
 import orderRoutes from './services/order-service/order.routes'
 import transactionRoutes from './services/transaction-service/transaction.routes'
 import { paymentStatus } from './services/transaction-service/transaction.controllers'
-import orderControllers from './services/order-service/order.controllers'
-import { verifyAuth } from './services/middleware/auth.middleware'
 
 
 const bodyParser = require("body-parser")
 
 
 mongoose.connect(process.env.MONGODB_CONNECT_STRING as string).then(() =>
-  console.log('Connected to mala cluster')
+    console.log('Connected to mala cluster')
 )
 
 const app = express()
@@ -31,8 +29,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //automatically converts body of all requests to json
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://sandbox.fapshi.com'],
-  credentials: true
+    origin: ['http://localhost:3000', 'https://sandbox.fapshi.com'],
+    credentials: true
 }))
 
 
@@ -43,25 +41,23 @@ app.use('/cart-service/cart', cartRoutes)
 app.use('/order-service/order', orderRoutes)
 app.use('/transaction-service/transaction', transactionRoutes)
 
-app.post('/mala-webhook', async (req: Request, res: Response, next: NextFunction) => {
- 
+app.post('/mala-webhook', async (req, res) => {
+
     console.log(req.body)
     const event: any = await paymentStatus(req.body.transId)
 
     if(event.statusCode !== 200)
-      return res.status(400).send({message: event.message});
-     
+        return res.status(400).send({message: event.message});
+    
       // Handle the event
       switch (event.status) {
         case 'SUCCESSFUL':
           // Then define and call a function to handle a SUCCESSFUL payment
           console.log(event, 'successful');
-          next()
           break;
         case 'FAILED':
           // Then define and call a function to handle a FAILED payment
           console.log(event, 'failed');
-          res.json({ status: 200, paymentFailed: true, message: 'Payment failed' })
           break;
         case 'EXPIRED':
           // Then define and call a function to handle an expired transaction
@@ -70,7 +66,10 @@ app.post('/mala-webhook', async (req: Request, res: Response, next: NextFunction
         // ... handle other event types
         default:
           console.log(`Unhandled event status: ${event.type}`);
-      }
+        }
+
+    res.send('ok')
+
 })
 
 
